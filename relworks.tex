@@ -1,0 +1,61 @@
+\documentclass[sigplan,nonacm]{acmart}
+\settopmatter{printfolios=true}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[normalem]{ulem}
+
+\title{Related Works}
+\author{Mark Madler}
+\begin{document}
+\maketitle
+%Closely Related Works
+\section{Closely Related Works}
+\subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
+entry paper\cite{Veldema-LCPC-2007}
+
+
+\subsection{Efficient Distributed Memory Management with RDMA and Caching }
+cache-line granularity\cite{Cai-VLDB-2018}
+%---------------------
+
+%Loosely Related / Line of Work 
+\section{Loosely Related but Evaluated}
+\subsection{CoRM: Compactable Remote Memory over RDMA}
+page based I think (re-read this)\cite{Taranov-ICMD-2021}
+
+
+\subsection{FaRM: Fast Remote Memory}
+Just like LOCO as we know, but no caching so not really DSM\cite{Dragojevic-NSDI-2014}
+
+
+\subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
+\begin{itemize}
+    \item Page based DSM
+    \item Special Diff merging and page sharing
+    \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
+\end{itemize}
+
+\subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory (MAGI)}
+Page-based DSM again\cite{Hong-JCST-2019}
+
+
+\subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
+Page-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
+
+
+\subsection{Argo DSM}
+Page-based DSM again but directory coherence
+
+
+
+%------------------------------
+
+%I looked these up but they were too far off to compare at all
+\section{Evaluated but not Related}
+\subsection{Rcmp: Reconstructing RDMA-Based Memory Disaggregation via CXL}
+page based and uses CXL, not comparable\cite{Wang-ACO-2024}
+
+%--------------------------------------------------------------
+
+\bibliographystyle{acm}
+\bibliography{relworks}
+\end{document}
