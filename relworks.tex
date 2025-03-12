@@ -8,13 +8,30 @@
 \begin{document}
 \maketitle
 %Closely Related Works
-\section{Closely Related Works}
+\section{Closely Related Works object based / not page-level granularity}
 \subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
-entry paper\cite{Veldema-LCPC-2007}
+entry paper. Interesting result is that it proves that invalidation protocols are better suited 
+for distributed systems. \cite{Veldema-LCPC-2007}
 
+\subsection{FaRM: Fast Remote Memory}
+Super similar to the entry paper. A lot of other papers call it DSM so 
+I am not totally sure about this. I think this still caches data at the page level.\cite{Dragojevic-NSDI-2014}
+
+\subsection{FaRMv2: Fast General Distributed Transactions with Opacity}
+Just like FaRM but with opacity. Also providing strict serializability.\cite{Shamis-SIGMOD-2019}
 
 \subsection{Efficient Distributed Memory Management with RDMA and Caching }
-cache-line granularity\cite{Cai-VLDB-2018}
+cache-line granularity.\cite{Cai-VLDB-2018}
+
+\subsection{Distributed Shared Object Memory}
+object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
+
+\subsection{Gengar: An RDMA-based Distributed Hybrid Memory Pool}
+This is object based dsm over rdma but with non-volatile memory as well using Intel Optane. Seems to 
+also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based.\cite{Duan-ICDCS-2021}
+
+\subsection{Scalable RDMA performance in PGAS languages}
+This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
 %---------------------
 
 %Loosely Related / Line of Work 
@@ -22,10 +39,8 @@ cache-line granularity\cite{Cai-VLDB-2018}
 \subsection{CoRM: Compactable Remote Memory over RDMA}
 page based I think (re-read this)\cite{Taranov-ICMD-2021}
 
-
-\subsection{FaRM: Fast Remote Memory}
-Just like LOCO as we know, but no caching so not really DSM\cite{Dragojevic-NSDI-2014}
-
+\subsection{LITE Kernel RDMA Support for Datacenter Applications}
+This is page based DSM using hte kernel. \cite{Tsai-SOSP-2017}
 
 \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
 \begin{itemize}
@@ -34,8 +49,8 @@ Just like LOCO as we know, but no caching so not really DSM\cite{Dragojevic-NSDI
     \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
 \end{itemize}
 
-\subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory (MAGI)}
-Page-based DSM again\cite{Hong-JCST-2019}
+\subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory: MAGI}
+Page-based DSM again. \cite{Hong-JCST-2019}
 
 
 \subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}

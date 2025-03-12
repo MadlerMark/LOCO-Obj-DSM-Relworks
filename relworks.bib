@@ -88,14 +88,13 @@ series = {NSDI'14}
   doi={10.1109/IPDRM51949.2020.00006}}
 
 @article{Hong-JCST-2019,
-author = {Hong, Yang and Zheng, Yang and Yang, Fan and Zang, Bin-Yu and Guan, Hai-Bing and Chen, Hai-Bo},
-year = {2019},
-month = {01},
-pages = {94-112},
-title = {Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory},
-volume = {34},
-journal = {Journal of Computer Science and Technology},
-doi = {10.1007/s11390-019-1901-4}
+  title={Scaling out numa-aware applications with rdma-based distributed shared memory},
+  author={Hong, Yang and Zheng, Yang and Yang, Fan and Zang, Bin-Yu and Guan, Hai-Bing and Chen, Hai-Bo},
+  journal={Journal of Computer Science and Technology},
+  volume={34},
+  pages={94--112},
+  year={2019},
+  publisher={Springer}
 }
 
 @article{Jia-ACO-2022,
@@ -116,4 +115,71 @@ month = mar,
 articleno = {20},
 numpages = {27},
 keywords = {false sharing, distributed shared memory, single system image, virtualization, Resource aggregation}
+}
+
+@INPROCEEDINGS{Guedes-WWOSIII-1993,
+  author={Guedes, P. and Castro, M.},
+  booktitle={Proceedings of IEEE 4th Workshop on Workstation Operating Systems. WWOS-III}, 
+  title={Distributed shared object memory}, 
+  year={1993},
+  volume={},
+  number={},
+  pages={142-149},
+  keywords={Coherence;Programming profession;Yarn;Power system modeling;Prefetching;Hardware;High-speed networks;Workstations;Libraries;Drives},
+  doi={10.1109/WWOS.1993.348158}}
+
+@INPROCEEDINGS{Duan-ICDCS-2021,
+  author={Duan, Zhuohui and Liu, Haikun and Lu, Haodi and Liao, Xiaofei and Jin, Hai and Zhang, Yu and He, Bingsheng},
+  booktitle={2021 IEEE 41st International Conference on Distributed Computing Systems (ICDCS)}, 
+  title={Gengar: An RDMA-based Distributed Hybrid Memory Pool}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={92-103},
+  keywords={Data centers;Protocols;Costs;Nonvolatile memory;Conferences;Semantics;Random access memory;Distributed Shared Memory;Non-volatile Memory;RDMA;Persistent Memory},
+  doi={10.1109/ICDCS51616.2021.00018}}
+
+@inproceedings{Tsai-SOSP-2017,
+author = {Tsai, Shin-Yeh and Zhang, Yiying},
+title = {LITE Kernel RDMA Support for Datacenter Applications},
+year = {2017},
+isbn = {9781450350853},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3132747.3132762},
+doi = {10.1145/3132747.3132762},
+abstract = {Recently, there is an increasing interest in building data-center applications with RDMA because of its low-latency, high-throughput, and low-CPU-utilization benefits. However, RDMA is not readily suitable for datacenter applications. It lacks a flexible, high-level abstraction; its performance does not scale; and it does not provide resource sharing or flexible protection. Because of these issues, it is difficult to build RDMA-based applications and to exploit RDMA's performance benefits.To solve these issues, we built LITE, a Local Indirection TiEr for RDMA in the Linux kernel that virtualizes native RDMA into a flexible, high-level, easy-to-use abstraction and allows applications to safely share resources. Despite the widely-held belief that kernel bypassing is essential to RDMA's low-latency performance, we show that using a kernel-level indirection can achieve both flexibility and low-latency, scalable performance at the same time. To demonstrate the benefits of LITE, we developed several popular datacenter applications on LITE, including a graph engine, a MapReduce system, a Distributed Shared Memory system, and a distributed atomic logging system. These systems are easy to build and deliver good performance. For example, our implementation of PowerGraph uses only 20 lines of LITE code, while outperforming PowerGraph by 3.5x to 5.6x.},
+booktitle = {Proceedings of the 26th Symposium on Operating Systems Principles},
+pages = {306–324},
+numpages = {19},
+keywords = {RDMA, indirection, low-latency network, network stack},
+location = {Shanghai, China},
+series = {SOSP '17}
+}
+@inproceedings{Shamis-SIGMOD-2019,
+author = {Shamis, Alex and Renzelmann, Matthew and Novakovic, Stanko and Chatzopoulos, Georgios and Dragojevi\'{c}, Aleksandar and Narayanan, Dushyanth and Castro, Miguel},
+title = {Fast General Distributed Transactions with Opacity},
+year = {2019},
+isbn = {9781450356435},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3299869.3300069},
+doi = {10.1145/3299869.3300069},
+abstract = {Transactions can simplify distributed applications by hiding data distribution, concurrency, and failures from the application developer. Ideally the developer would see the abstraction of a single large machine that runs transactions sequentially and never fails. This requires the transactional subsystem to provide opacity (strict serializability for both committed and aborted transactions), as well as transparent fault tolerance with high availability. As even the best abstractions are unlikely to be used if they perform poorly, the system must also provide high performance. Existing distributed transactional designs either weaken this abstraction or are not designed for the best performance within a data center. This paper extends the design of FaRM --- which provides strict serializability only for committed transactions --- to provide opacity while maintaining FaRM's high throughput, low latency, and high availability within a modern data center. It uses timestamp ordering based on real time with clocks synchronized to within tens of microseconds across a cluster, and a failover protocol to ensure correctness across clock master failures. FaRM with opacity can commit 5.4 million neworder transactions per second when running the TPC-C transaction mix on 90 machines with 3-way replication.},
+booktitle = {Proceedings of the 2019 International Conference on Management of Data},
+pages = {433–448},
+numpages = {16},
+keywords = {rdma, opacity, multi-version concurrency control, global time, distributed transactions, clock synchronization},
+location = {Amsterdam, Netherlands},
+series = {SIGMOD '19}
+}
+@INPROCEEDINGS{Farreras-IPDPS-2009,
+author = {Farreras, Montse and Almasi, George and Cascaval, Calin and Cortes, Toni},
+title = {Scalable RDMA performance in PGAS languages},
+year = {2009},
+volume = {},
+number = {},
+pages = {1-12},
+keywords = {Electronics packaging;Large-scale systems;Scalability;Runtime;Parallel programming;Yarn;Delay;Computer architecture;Parallel machines;Productivity},
+doi = {10.1109/IPDPS.2009.5161025}
 }
