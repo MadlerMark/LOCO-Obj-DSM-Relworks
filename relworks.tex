@@ -1,6 +1,7 @@
 \documentclass[sigplan,nonacm]{acmart}
 \settopmatter{printfolios=true}
 \usepackage{graphicx} % Required for inserting images
+\graphicspath{ {./images/} } %images subfolder
 \usepackage[normalem]{ulem}
 
 \title{Related Works}
@@ -15,92 +16,111 @@
 \section{Replicated Data Stores over RDMA}
 
     \subsection{Kite: efficient and available release consistency for the datacenter}
-    This is the real entry paper. This is a replicated KVS over RDMA.\cite{Gavrielatos-PPoPP-2020}
-
-    \subsection {Hermes: A Fast, Fault-Tolerant and Linearizable Replication Protocol}
-    Fault tolerant protocol for replication of datastore. Linearizable. \cite{Katsarakis-ASPLOS-2020}
-
-    \subsection {Hamband: RDMA Replicated Data Types}
-    This is obviously a replicated system.\cite{Houshmand-PLDI-2022}
+    This is the real entry paper. This is a replicated KVS over RDMA with \textbf{Release Consistency}.\cite{Gavrielatos-PPoPP-2020} 
 
     \subsection{FaRM: Fast Remote Memory}
-    Super similar to the entry paper. A lot of other papers call it DSM so 
-    I am not totally sure about this. I think this still caches data at the page level.\cite{Dragojevic-NSDI-2014}
+    Super similar to the entry paper in that is is a KVS for RDMA, but this one is I beleive either disaggregated or not. 
+    Farm could really be classified as a KVS or even a protocol. This design always replicates state info. 
+    Provides \textbf{strict serializability}.\cite{Dragojevic-NSDI-2014}
 
     \subsection{FaRMv2: Fast General Distributed Transactions with Opacity}
-    Just like FaRM but with opacity. Also providing strict serializability.\cite{Shamis-SIGMOD-2019}
+    Just like FaRM but with opacity. Also providing \textbf{strict serializability}.\cite{Shamis-SIGMOD-2019}
 
+    \subsection{HERD: Using RDMA efficiently for key-value services}
+    Herd.\cite {Kalia-SIGCOMM-2014}
+
+    \subsection{Sherman }
+
+
+    \subsection{Pilaf }
+    Linearizable data store.
+
+    \subsection{scythe }
+
+
+    \subsection{HCL }
+    Strictly serializabile?
+
+    \subsection{Rolex}
+    I don't think this one really works.
 %                       DSM OVER RDMA
 %-----------------------------------------------------------------------------------
-
 \section {DSM systems}
 
     \subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory: MAGI}
-    Page-based DSM again. \cite{Hong-JCST-2019}
+    Page-based DSM. \cite{Hong-JCST-2019}
+
+    \subsection{Efficient Distributed Memory Management with RDMA and Caching }
+    cache-line granularity DSM.\cite{Cai-VLDB-2018}
+
+    \subsection{Distributed Shared Object Memory}
+    object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
 
     \subsection{Gengar: An RDMA-based Distributed Hybrid Memory Pool}
     This is object based dsm over rdma but with non-volatile memory as well using Intel Optane. Seems to 
     also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based.\cite{Duan-ICDCS-2021}
 
-    \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
-    \begin{itemize}
-        \item Page based DSM
-        \item Special Diff merging and page sharing
-        \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
-    \end{itemize}
+    \subsection{TreadMarks: shared memory computing on networks of workstations}
+    Was implemented over IP, lazy release consistency I think. Not sure of granularity yet.\cite{Amza-Usenix-1994}
 
-    \subsection{Argo DSM (Turning Centralized Coherence and Distributed Critical-Section Execution on their Head: A New Approach for Scalable Distributed Shared Memory)}
+    \subsection{LITE Kernel RDMA Support for Datacenter Applications}
+    This is page based DSM using the kernel. \cite{Tsai-SOSP-2017}
+
+    \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
+        \begin{itemize}
+            \item Page based DSM
+            \item Special Diff merging and page sharing
+            \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
+        \end{itemize}
+
+    \subsection{Argo DSM}
     Page-based DSM again but directory coherence. This was maybe the first RDMA-based DSM paper, 
     at least thats what the authors allude to.\cite{Kaxiras-HPDC-2015}
 
-    \subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
-    entry paper? Interesting result is that it proves that invalidation protocols are better suited 
-    for distributed systems. \cite{Veldema-LCPC-2007}
-
-%                       OTHER STUFF
-%-----------------------------------------------------------------------------------
-
-\section{Closely Related Works object based / not page-level granularity}
-
-    \subsection {Odyssey: The Impact of Modern Hardware on Strongly-Consistent Replication Protocols} %where to put this
-    This is the larger project that Kite is a part of. Not really an implemented work itself but it is sort of 
-    a survey of protocols used.\cite{Gavrielatos-EuroSys-2021}
-
-    \subsection{Efficient Distributed Memory Management with RDMA and Caching } %where to put this
-    cache-line granularity.\cite{Cai-VLDB-2018} 
-
-    \subsection{Distributed Shared Object Memory}%where to put this
-    object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
+    \subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
+    age-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
 
     \subsection{Scalable RDMA performance in PGAS languages}
     This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
-%-----------------------------------------------------------------------------------
+%-----------------------------------------------------------------------------------------
+%                       PROTOCOLS OVER RDMA FOR CONSISTENCY
+%----------------------------------------------------------------------------------------
+\section{Protocols over RDMA for Consistency}
 
+    \subsection {Odyssey: The Impact of Modern Hardware on Strongly-Consistent Replication Protocols}
+    This paper is a summary of protocols used for RDMA communication. These protocols were used to 
+    enforce consistency and were tested with a series of KVSs. This paper is related to Kite (same authors) 
+    and Kite is one of the KVSs tested.\cite{Gavrielatos-EuroSys-2021}
+
+    \subsection {Hermes: A Fast, Fault-Tolerant and Linearizable Replication Protocol}
+    This paper \cite{Katsarakis-ASPLOS-2020} is one of the Protocols tested by the above paper Odyssey \cite{Gavrielatos-EuroSys-2021}. This 
+    protocol guarantees linearizablity and is designed to work on replicated store systems.
+
+    \subsection {Hamband: RDMA Replicated Data Types}
+    This paper \cite{Houshmand-PLDI-2022} designed new RDMA data types that are replicated across nodes. This paper 
+    is sort of a protocol paper as it implements this protocol to keep replicated data through either relaxed or 'strong consistency'.
+
+    \subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
+    Interesting result is that it proves that invalidation protocols are better suited 
+    for distributed systems. \cite{Veldema-LCPC-2007}
+%----------------------------------------------------------------------------------------
+%                       AWESOME TABLE
+%----------------------------------------------------------------------------------------
+\section{table i found}
+\includegraphics[width=0.5\textwidth]{Table_1_A_Survey_of_Storage_Systems_in_the_RDMA_Era}
+\cite{Ma-PDS-2022}
+%-----------------------------------------------------------------------------------------
+%                       LOOSELY RELATED
+%-----------------------------------------------------------------------------------------
 %Loosely Related / Line of Work 
 \section{Loosely Related but Evaluated}
-\subsection{TreadMarks: shared memory computing on networks of workstations}
-Was implemented over IP, lazy release consistency I think. Not sure of granularity yet.\cite{Amza-Usenix-1994}
+    \subsection{CoRM: Compactable Remote Memory over RDMA}
+    page based I think (re-read this)\cite{Taranov-ICMD-2021}
 
-\subsection{CoRM: Compactable Remote Memory over RDMA}
-page based I think (re-read this)\cite{Taranov-ICMD-2021}
+    \subsection{Rcmp: Reconstructing RDMA-Based Memory Disaggregation via CXL}
+    page based and uses CXL, not comparable\cite{Wang-ACO-2024}
+%-----------------------------------------------------------------------------------------
 
-\subsection{LITE Kernel RDMA Support for Datacenter Applications}
-This is page based DSM using the kernel. \cite{Tsai-SOSP-2017}
-
-
-\subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
-Page-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
-
-
-
-%------------------------------
-
-%I looked these up but they were too far off to compare at all
-\section{Evaluated but not Related}
-\subsection{Rcmp: Reconstructing RDMA-Based Memory Disaggregation via CXL}
-page based and uses CXL, not comparable\cite{Wang-ACO-2024}
-
-%--------------------------------------------------------------
 
 \bibliographystyle{acm}
 \bibliography{relworks}
