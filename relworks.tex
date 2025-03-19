@@ -7,64 +7,89 @@
 \author{Mark Madler}
 \begin{document}
 \maketitle
-%Closely Related Works
+%All are related to some degree -- so they are organized as follows:
+
+%                       REPLICATED KVS
+%------------------------------------------------------------------------------------
+
+\section{Replicated Data Stores over RDMA}
+
+    \subsection{Kite: efficient and available release consistency for the datacenter}
+    This is the real entry paper. This is a replicated KVS over RDMA.\cite{Gavrielatos-PPoPP-2020}
+
+    \subsection {Hermes: A Fast, Fault-Tolerant and Linearizable Replication Protocol}
+    Fault tolerant protocol for replication of datastore. Linearizable. \cite{Katsarakis-ASPLOS-2020}
+
+    \subsection {Hamband: RDMA Replicated Data Types}
+    This is obviously a replicated system.\cite{Houshmand-PLDI-2022}
+
+    \subsection{FaRM: Fast Remote Memory}
+    Super similar to the entry paper. A lot of other papers call it DSM so 
+    I am not totally sure about this. I think this still caches data at the page level.\cite{Dragojevic-NSDI-2014}
+
+    \subsection{FaRMv2: Fast General Distributed Transactions with Opacity}
+    Just like FaRM but with opacity. Also providing strict serializability.\cite{Shamis-SIGMOD-2019}
+
+%                       DSM OVER RDMA
+%-----------------------------------------------------------------------------------
+
+\section {DSM systems}
+
+    \subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory: MAGI}
+    Page-based DSM again. \cite{Hong-JCST-2019}
+
+    \subsection{Gengar: An RDMA-based Distributed Hybrid Memory Pool}
+    This is object based dsm over rdma but with non-volatile memory as well using Intel Optane. Seems to 
+    also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based.\cite{Duan-ICDCS-2021}
+
+    \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
+    \begin{itemize}
+        \item Page based DSM
+        \item Special Diff merging and page sharing
+        \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
+    \end{itemize}
+
+    \subsection{Argo DSM (Turning Centralized Coherence and Distributed Critical-Section Execution on their Head: A New Approach for Scalable Distributed Shared Memory)}
+    Page-based DSM again but directory coherence. This was maybe the first RDMA-based DSM paper, 
+    at least thats what the authors allude to.\cite{Kaxiras-HPDC-2015}
+
+    \subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
+    entry paper? Interesting result is that it proves that invalidation protocols are better suited 
+    for distributed systems. \cite{Veldema-LCPC-2007}
+
+%                       OTHER STUFF
+%-----------------------------------------------------------------------------------
+
 \section{Closely Related Works object based / not page-level granularity}
-\section {Odyssey: The Impact of Modern Hardware on Strongly-Consistent Replication Protocols}
 
-\section {Hermes: A Fast, Fault-Tolerant and Linearizable Replication Protocol}
+    \subsection {Odyssey: The Impact of Modern Hardware on Strongly-Consistent Replication Protocols} %where to put this
+    This is the larger project that Kite is a part of. Not really an implemented work itself but it is sort of 
+    a survey of protocols used.\cite{Gavrielatos-EuroSys-2021}
 
-\section {Hamband: RDMA Replicated Data Types}
+    \subsection{Efficient Distributed Memory Management with RDMA and Caching } %where to put this
+    cache-line granularity.\cite{Cai-VLDB-2018} 
 
-\subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
-entry paper. Interesting result is that it proves that invalidation protocols are better suited 
-for distributed systems. \cite{Veldema-LCPC-2007}
+    \subsection{Distributed Shared Object Memory}%where to put this
+    object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
 
-\subsection{FaRM: Fast Remote Memory}
-Super similar to the entry paper. A lot of other papers call it DSM so 
-I am not totally sure about this. I think this still caches data at the page level.\cite{Dragojevic-NSDI-2014}
-
-\subsection{FaRMv2: Fast General Distributed Transactions with Opacity}
-Just like FaRM but with opacity. Also providing strict serializability.\cite{Shamis-SIGMOD-2019}
-
-\subsection{Efficient Distributed Memory Management with RDMA and Caching }
-cache-line granularity.\cite{Cai-VLDB-2018}
-
-\subsection{Distributed Shared Object Memory}
-object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
-
-\subsection{Gengar: An RDMA-based Distributed Hybrid Memory Pool}
-This is object based dsm over rdma but with non-volatile memory as well using Intel Optane. Seems to 
-also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based.\cite{Duan-ICDCS-2021}
-
-\subsection{Scalable RDMA performance in PGAS languages}
-This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
-%---------------------
+    \subsection{Scalable RDMA performance in PGAS languages}
+    This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
+%-----------------------------------------------------------------------------------
 
 %Loosely Related / Line of Work 
 \section{Loosely Related but Evaluated}
+\subsection{TreadMarks: shared memory computing on networks of workstations}
+Was implemented over IP, lazy release consistency I think. Not sure of granularity yet.\cite{Amza-Usenix-1994}
+
 \subsection{CoRM: Compactable Remote Memory over RDMA}
 page based I think (re-read this)\cite{Taranov-ICMD-2021}
 
 \subsection{LITE Kernel RDMA Support for Datacenter Applications}
-This is page based DSM using hte kernel. \cite{Tsai-SOSP-2017}
-
-\subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
-\begin{itemize}
-    \item Page based DSM
-    \item Special Diff merging and page sharing
-    \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
-\end{itemize}
-
-\subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory: MAGI}
-Page-based DSM again. \cite{Hong-JCST-2019}
+This is page based DSM using the kernel. \cite{Tsai-SOSP-2017}
 
 
 \subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
 Page-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
-
-
-\subsection{Argo DSM}
-Page-based DSM again but directory coherence
 
 
 
