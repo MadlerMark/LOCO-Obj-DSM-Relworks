@@ -13,7 +13,7 @@
 %                       REPLICATED KVS
 %------------------------------------------------------------------------------------
 
-\section{Replicated Data Stores over RDMA}
+\section{KVS over RDMA}
 
     \subsection{Kite: efficient and available release consistency for the datacenter}
     This is the real entry paper. This is a replicated KVS over RDMA with \textbf{Release Consistency}.\cite{Gavrielatos-PPoPP-2020} 
@@ -30,16 +30,16 @@
     Herd.\cite {Kalia-SIGCOMM-2014}
 
     \subsection{Sherman }
-
+    This paper \cite{Wang-SIGMOD-2022} is disaggregated. Node-granularity. "consistent".
 
     \subsection{Pilaf }
-    Linearizable data store.
+    Linearizable data store. Self-correcting
 
     \subsection{scythe }
-
+    KVS again.
 
     \subsection{HCL }
-    Strictly serializabile?
+    Strictly serializabile KVS
 
     \subsection{Rolex}
     I don't think this one really works.
@@ -78,14 +78,20 @@
     at least thats what the authors allude to.\cite{Kaxiras-HPDC-2015}
 
     \subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
-    age-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
+    Page-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
 
     \subsection{Scalable RDMA performance in PGAS languages}
     This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
+
+    \subsection{Misc PGAS languages probably}
 %-----------------------------------------------------------------------------------------
 %                       PROTOCOLS OVER RDMA FOR CONSISTENCY
 %----------------------------------------------------------------------------------------
 \section{Protocols over RDMA for Consistency}
+
+    \subsection{Notes on PGAS and "protocols"}
+    It seems like there are not agreed upon semantics on what is a protocol. MPI seems like a protocol but is it? PGAS is a 
+    memory model.
 
     \subsection {Odyssey: The Impact of Modern Hardware on Strongly-Consistent Replication Protocols}
     This paper is a summary of protocols used for RDMA communication. These protocols were used to 

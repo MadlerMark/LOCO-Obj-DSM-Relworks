@@ -314,3 +314,20 @@ pages={4395-4409},
 keywords={Semantics;Random access memory;Protocols;Hardware;Programming;Performance evaluation;File systems;Network;storage;RDMA;RPC;key-value store;file system;distributed memory;smart NIC},
 doi={10.1109/TPDS.2022.3188656}}
 
+@inproceedings{Wang-SIGMOD-2022,
+author = {Wang, Qing and Lu, Youyou and Shu, Jiwu},
+title = {Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory},
+year = {2022},
+isbn = {9781450392495},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3514221.3517824},
+doi = {10.1145/3514221.3517824},
+abstract = {Memory disaggregation architecture physically separates CPU and memory into independent components, which are connected via high-speed RDMA networks, greatly improving resource utilization of databases. However, such an architecture poses unique challenges to data indexing due to limited RDMA semantics and near-zero computation power at memory-side. Existing indexes supporting disaggregated memory either suffer from low write performance, or require hardware modification. This paper presents Sherman, a write-optimized distributed B+Tree index on disaggregated memory that delivers high performance with commodity RDMA NICs. Sherman combines RDMA hardware features and RDMA-friendly software techniques to boost index write performance from three angles. First, to reduce round trips, Sherman coalesces dependent RDMA commands by leveraging in-order delivery property of RDMA. Second, to accelerate concurrent accesses, Sherman introduces a hierarchical lock that exploits on-chip memory of RDMA NICs. Finally, to mitigate write amplification, Sherman tailors the data structure layout of B+Tree with a two-level version mechanism. Our evaluation shows that, Sherman is one order of magnitude faster in terms of both throughput and 99th percentile latency on typical write-intensive workloads, compared with state-of-the-art designs.},
+booktitle = {Proceedings of the 2022 International Conference on Management of Data},
+pages = {1033–1048},
+numpages = {16},
+keywords = {RDMA, disaggregated memory, index},
+location = {Philadelphia, PA, USA},
+series = {SIGMOD '22}
+}
