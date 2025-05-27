@@ -16,7 +16,10 @@
 \section{KVS over RDMA}
 
     \subsection{Kite: efficient and available release consistency for the datacenter}
-    This is the real entry paper. This is a replicated KVS over RDMA with \textbf{Release Consistency}.\cite{Gavrielatos-PPoPP-2020} 
+    This is the real entry paper. This is a replicated KVS over RDMA with a 
+    "Linearizable variant of" \textbf{Release Consistency}. Some mention of Release Consistency
+    as a "one sided barrier." Compares against Zookeeper and Derecho. Uses some 
+    monotonically increasing clocks to track versions.\cite{Gavrielatos-PPoPP-2020} 
 
     \subsection{FaRM: Fast Remote Memory}
     Super similar to the entry paper in that is is a KVS for RDMA, but this one is I beleive either disaggregated or not. 
@@ -27,22 +30,45 @@
     Just like FaRM but with opacity. Also providing \textbf{strict serializability}.\cite{Shamis-SIGMOD-2019}
 
     \subsection{HERD: Using RDMA efficiently for key-value services}
-    Herd.\cite {Kalia-SIGCOMM-2014}
+    Herd. Fast because it uses a weird combination of UD and message things.\cite {Kalia-SIGCOMM-2014}
 
-    \subsection{Sherman }
-    This paper \cite{Wang-SIGMOD-2022} is disaggregated. Node-granularity. "consistent".
+    \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory}
+    This system is disaggregated. Node-granularity. "consistent". Optimizations are established
+    to target mainly chained atomic operations and write-amplification. \cite{Wang-SIGMOD-2022}
 
-    \subsection{Pilaf }
-    Linearizable data store. Self-correcting
+    \subsection{Using One-Sided RDMA Reads to Build a Fast, CPU-Efficient Key-Value Store (Pilaf) }
+    Linearizable data store.  Self-correcting. Note that this paper has a great 
+    analysis of IPoIB as well as RDMA vs verbs latency and thrup. \cite{Mitchell-ATC-2013}
 
-    \subsection{scythe }
-    KVS again.
+    \subsection{Scythe: A Low-Latency RDMA-enabled Distributed Transaction System for Disaggregate Memory }
+    KVS again. Seels to optimize concurrency control, timestamping, bandwidth. Uses Timestamp Oracle (TSO)
+    hot-aware concurrecy control. Allows RPC. \cite{Lu-ACMtrans-2024}
 
-    \subsection{HCL }
-    Strictly serializabile KVS
+    \subsection{HCL: Distributing Parallel Data Structures in Extreme Scales}
+    Strictly serializabile KVS. HCL stands for Hermes Containder Library. \cite{Devarajan-CLUSTER-2020}
 
+    \subsection{BCL: A Cross-Platform Distributed Data Structures Library}
+    Confusingly uses either MPI, OpenSHMEM, GASNET-EX, and UPC++ as backends. Must be slow. \cite{Brock-ICPP-2019}
+    
     \subsection{Rolex}
-    I don't think this one really works.
+    I don't think this one really works. Uses learned indexes. splits compute and memory. \cite{Li-FAST-2023}
+
+    \subsection{Exploiting Hybrid Index Scheme for RDMA-based Key-Value Stores*** (Hstore)}
+    Seeks to solve issue of range-lookups. Compares against Sherman and Clover( LOOK INTO CLOVER). 
+    This does indeed outperform sherman on YCSB. Maybe problematic for LOCO. claims 54\% improvement 
+    over sherman.\cite{Han-SYSTOR-2023}
+
+    \subsection{Disaggregating Persistent Memory and Controlling Them Remotely: An Exploration of Passive Disaggregated Key-Value Stores}
+    "Clover". Workes on Persistent memory. A bit older, not worth comparing against unless looking into PM. also maybe faster 
+    than Sherman but definitely not the fastest.\cite{Tsai-USENIX-2020}
+
+    \subsection{AStore: Uniformed Adaptive Learned Index and Cache for RDMA-Enabled Key-Value Store}
+    Supposedly outperforms \textbf{Sherman} by A LOT. ALso compares against "xstore" "Rolex" and "hybrid (not to be confused
+    with the above hybrid index scheme which also independetly claims to be faster than Sherman)". 
+    The results also suggest that Rolex outperforms \textbf{Sherman}. claims up to 91\% improvement over \textbf{Sherman}\cite{Qiao-IEEEtrans-2024}
+
+    \subsection{Maintaining Cache Consistency in RDMA-based Distributed Key-Value storage System}
+    note really worth considering it seems. This is indeed a KVS but only seems to compare against scale store. \cite{Hou-DSIT-2024}
 %                       DSM OVER RDMA
 %-----------------------------------------------------------------------------------
 \section {DSM systems}
