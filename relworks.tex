@@ -40,6 +40,7 @@
     Linearizable data store.  Self-correcting. Note that this paper has a great 
     analysis of IPoIB as well as RDMA vs verbs latency and thrup. \cite{Mitchell-ATC-2013}
 
+    %%  NEWLY ADDED  %%
     \subsection{Scythe: A Low-Latency RDMA-enabled Distributed Transaction System for Disaggregate Memory }
     KVS again. Seels to optimize concurrency control, timestamping, bandwidth. Uses Timestamp Oracle (TSO)
     hot-aware concurrecy control. Allows RPC. \cite{Lu-ACMtrans-2024}
@@ -69,6 +70,13 @@
 
     \subsection{Maintaining Cache Consistency in RDMA-based Distributed Key-Value storage System}
     note really worth considering it seems. This is indeed a KVS but only seems to compare against scale store. \cite{Hou-DSIT-2024}
+
+    \subsection{FastStore: A High-Performance RDMA-Enabled Distributed Key-Value Store with Persistent Memory}
+    not really worth considering. Again PM. COmpares against Clover and Sherman. Also is faster than Sherman with lower latency 
+    as well as higher throughput. \cite{Xiong-ICDCS-2023}
+
+    \subsection{LoLKV: The Logless, Linearizable, RDMA-based Key-Value Storage System}
+    Weirdly does not compare against state of the art really. All of the comparisons are against older consensus protocols.\cite{Alquraan-NSDI-2024}
 %                       DSM OVER RDMA
 %-----------------------------------------------------------------------------------
 \section {DSM systems}
