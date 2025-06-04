@@ -42,7 +42,7 @@
     In the future it might be wise to refer back to this paper for info about the performance 
     metrics from RDMA verbs.\cite {Kalia-SIGCOMM-2014}
 
-    \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory}
+    \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory} %% start here %%
     This system is disaggregated. Node-granularity. "consistent". Optimizations are established
     to target mainly chained atomic operations and write-amplification. \cite{Wang-SIGMOD-2022}
 
@@ -94,40 +94,61 @@
 \section {DSM systems}
 
     \subsection{Scaling out NUMA-Aware Applications with RDMA-Based Distributed Shared Memory: MAGI}
-    Page-based DSM. \cite{Hong-JCST-2019}
+    Page-based DSM. \textbf{Sequentially consistent} with the option of overriding in some cases. They use 
+    smaller page sizes to try and over come page-based problems like write-amplification. They implement 
+    strategies from traditional shared memory systems to enahnce their performance. They use specualtive 
+    page faults to fetch pages before they are needed. Since the TLB is used extensively to maintain 
+    a coherence within a node in terms of page visibility, there is a large overhead in the form of interrupts.
+    The authors decided to batch these interrupts for improved performance. Unfortunately they have weak results
+    which slow slight improvements over a "baseline" but do not compare against anything else. The baseline seems to be 
+    their DSM without the speculation and batching.\cite{Hong-JCST-2019}
 
-    \subsection{Efficient Distributed Memory Management with RDMA and Caching }
-    cache-line granularity DSM.\cite{Cai-VLDB-2018}
+    \subsection{Efficient Distributed Memory Management with RDMA and Caching (GAM) }
+    cache-line granularity DSM. Directory based, \textbf{Partial Store Order}. \textbf{PGAS addressing model}. 
+    Use the directory to track the cache state at each node (DRMA cache). Attempsts to implement LRU 
+    caching.  \cite{Cai-VLDB-2018}
 
     \subsection{Distributed Shared Object Memory}
-    object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993}
+    object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993} %idk if worth reading
 
     \subsection{Gengar: An RDMA-based Distributed Hybrid Memory Pool}
     This is object based dsm over rdma but with non-volatile memory as well using Intel Optane. Seems to 
-    also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based.\cite{Duan-ICDCS-2021}
+    also use this lease assignment idea like in \cite{Endo-IPDRM-2020} but is not page based. Uses a client / 
+    server model where the servers provide DRAM and NVM to clients. The distributed DRAM is like a write-through 
+    cache where the writes go through to Persistent memory. For some reason they provide longer leases 
+    for hot objects (seems like this would increase worst case latency). Good results. \cite{Duan-ICDCS-2021}
 
     \subsection{TreadMarks: shared memory computing on networks of workstations}
-    Was implemented over IP, lazy release consistency I think. Not sure of granularity yet.\cite{Amza-Usenix-1994}
+    Was implemented over IP, lazy release consistency. Uses diffs to allow for multiple-writers. 
+    Uses the page-size granularity, but diffs make this a little different. Also optimized for multiple threads
+    on a local machine accessing the same page. \cite{Amza-Usenix-1994}
 
     \subsection{LITE Kernel RDMA Support for Datacenter Applications}
-    This is page based DSM using the kernel. \cite{Tsai-SOSP-2017}
+    This is page based DSM using the kernel. Has some care for permissions and security which is nice. 
+    Claims to have more scalable thorughput than standard verbs. they run a DSM over their implementation.
+    So this is not exactly a DSM but rather a way of using RDMA generally. \cite{Tsai-SOSP-2017}
 
-    \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA}
+    \subsection{MENPS: A Decentralized Distributed Shared Memory Exploiting RDMA} %% deep read this %%
         \begin{itemize}
             \item Page based DSM
             \item Special Diff merging and page sharing
             \item Combine write notices and logical leases (what is that?)\cite{Endo-IPDRM-2020}
         \end{itemize}
 
-    \subsection{Argo DSM}
-    Page-based DSM again but directory coherence. This was maybe the first RDMA-based DSM paper, 
-    at least thats what the authors allude to.\cite{Kaxiras-HPDC-2015}
+    \subsection{Argo DSM} 
+    Page-based DSM. The authors propose a coherence trick where nodes will self-invalidate 
+    or self-downgrade to avoid coherence traffic. They implement a message-free protocol (one sided verbs). 
+    Built on top of MPI. Aim to resuce cost of directory based coherence. One of the main ideas is that 
+    a node may read any data block as long as it will invalidate that data at the next synchronization point. \cite{Kaxiras-HPDC-2015}
 
     \subsection {GiantVM: A Novel Distributed Hypervisor for Resource Aggregation with DSM-aware Optimizations}
-    Page-based DSM again but also works over TCP and RDMA\cite{Jia-ACO-2022}
+    Page-based DSM again but also works over TCP and RDMA. Basically its a distributed virtual CPU. It seems like 
+    it is just a global address space that is known to the Hypervisor.\cite{Jia-ACO-2022}
 
     \subsection{Scalable RDMA performance in PGAS languages}
-    This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups.\cite{Farreras-IPDPS-2009}
+    This paper is for PGAS languages. Has an address hash table similar to LOCO for remote lookups. Written in 
+    collaboration with IBM and details  the IBM XLUPC compiler + runtime. Some caching for performance. A little old of a paper
+    so things like UPC++ were not around yet.\cite{Farreras-IPDPS-2009}
 
     \subsection {misc RDMA coherence papers}
 
