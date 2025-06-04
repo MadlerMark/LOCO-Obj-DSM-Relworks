@@ -24,13 +24,23 @@
     \subsection{FaRM: Fast Remote Memory}
     Super similar to the entry paper in that is is a KVS for RDMA, but this one is I beleive either disaggregated or not. 
     Farm could really be classified as a KVS or even a protocol. This design always replicates state info. 
-    Provides \textbf{strict serializability}.\cite{Dragojevic-NSDI-2014}
+    Provides \textbf{strict serializability}, so Transaction based consistency.
+    So FaRM provides lock-free reads. The authors mention
+    a "shared address space." \cite{Dragojevic-NSDI-2014}
 
     \subsection{FaRMv2: Fast General Distributed Transactions with Opacity}
-    Just like FaRM but with opacity. Also providing \textbf{strict serializability}.\cite{Shamis-SIGMOD-2019}
+    Just like FaRM but with opacity. Also providing \textbf{strict serializability}.
+    Idk if this paper is really something to look at or not (TODO)\cite{Shamis-SIGMOD-2019}
 
     \subsection{HERD: Using RDMA efficiently for key-value services}
-    Herd. Fast because it uses a weird combination of UD and message things.\cite {Kalia-SIGCOMM-2014}
+    Herd. Fast because it uses a weird combination of UD and message things.
+    This combination is essentiall UC (unreliable connection) requests places 
+    as writes to the server, then serviced by a server polling thread. The server replies over 
+    UD (unreliable datagram) (this is a 2-sided send). One of the main ideas 
+    of this paper is that writes can be faster than reads because there is 
+    (at least with unreliable connection) no need for the destination to respond. 
+    In the future it might be wise to refer back to this paper for info about the performance 
+    metrics from RDMA verbs.\cite {Kalia-SIGCOMM-2014}
 
     \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory}
     This system is disaggregated. Node-granularity. "consistent". Optimizations are established
