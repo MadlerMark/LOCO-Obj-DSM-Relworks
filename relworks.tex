@@ -9,10 +9,58 @@
 \begin{document}
 \maketitle
 %All are related to some degree -- so they are organized as follows:
+\section{Related Works}
+Generally all RDMA systems seek to optimize the use of underlying RDMA operations.
+Different RDMA operations have different costs and benefits, for example one-sided verbs
+are excellent at performing remote reads or other tasks which are not highly contentious. 
+Depending on the application, some researchers opt to use two-sided sends while others
+use one-sided writes. The advantage of using two-sided sends is that the remote CPU is 
+involved and can handle highly contentious situations locally wihout the need for 
+excessive RDMA communication. One-sided writes are generally more optimal when there 
+is less contention as they avoid interaction with the remote CPU, but pose more of a challenge
+when it comes to synchronization and contention.
+
+% Distributed memory abstractiosn can generally be grouped into two categories: a Partitioned Global 
+% Address Spaces (PGAS), and replicated address spaces. There exist multiple PGAS languages which allow 
+% for programming of multiple machines in a more traditional shared memory style.
+
+Distributed memory abstractions generally fall into a two categories:
+Some global or Partitioned-Global Address Space (PGAS), and replicated address spaces. While both of these design philosophies 
+generally rely on the same underlying verbs or at least some similar mechanisms they tend to 
+serve different goals. The partitioned global address space model is great for creating a Distributed 
+Shared Memory system (DSM), but lacks some of the performance that might be found in systems that support replication. 
+A naiive PGAS model will incur large performance overheads if accessing remote data often
+without concepts like caching or other methods to achieve data locality. Key-value stores on the other hand lack generality and can be used as shared memory, but 
+either suffer from poor locality or high coherence overhead. Often times a performance optimization of key-value stores it to cache indexes for 
+systems that have a complicated lookup process. Replicated Address space designs are very interesting as they do see the performance 
+benefits of caching unlike a naiive pgas and some key-value stores, but they also see a performance drawback in terms of 
+reduced memory size. Many concurrent data structures can easily be built upon these replicated address spaces, but these address 
+spaces are not scalable. Of these models (distributed) key-value stores and PGAS models are more scalable. \textbf{Speculatively} our 
+system will be much faster than existing optimized PGAS models because existing PGAS models have more expensive coherence 
+between cached copies of data. This paper falls into the category of PGAS, but relies on the common programming practice 
+to use Release Consistency, and the observation that the only time coherence is needed in Release Consistency 
+is when there is a synchronizes-with edge between an acquire and a release.
+
+distributed + pgas stuff:
+farm (though there is replication for durability \cite{Dragojevic-NSDI-2014}), 
+
+replicated stuff:
+Kite (\cite{Gavrielatos-PPoPP-2020}), 
+
+Distributed memory abstractions can generally be divided into three categories.
+These categories are Key-value stores, DSMs, and other. The nomenclature surrounding 
+these abstractions is generally not consistent across research and thus a definition of each 
+of these categories follows. Key-value store are sometimes considered Distributed Shared Memory systems
+since all memory accesses could be treated as hash-table lookups but this is not a holistic view. Key-value
+stores are effective as databases and may lose performance if used as a DSM. Classic DSMs are a shared
+memory abstraction which treats at least some portion of memory as globally addressable. These DSMs 
+classically have some coherence protocol which allows for a consistent view of memory by all processes.
+Maintaining this coherence is a bit more difficult than a system that is just a hashtable as communication is 
+costly and caching should be implemented. Other 
+
 
 %                       REPLICATED KVS
 %------------------------------------------------------------------------------------
-
 \section{KVS over RDMA}
 
     \subsection{Kite: efficient and available release consistency for the datacenter}
@@ -22,7 +70,7 @@
     monotonically increasing clocks to track versions.\cite{Gavrielatos-PPoPP-2020} 
 
     \subsection{FaRM: Fast Remote Memory}
-    Super similar to the entry paper in that is is a KVS for RDMA, but this one is I beleive either disaggregated or not. 
+    Super similar to the entry paper in that is is a KVS for RDMA, but this one is I beleive disaggregated. 
     Farm could really be classified as a KVS or even a protocol. This design always replicates state info. 
     Provides \textbf{strict serializability}, so Transaction based consistency.
     So FaRM provides lock-free reads. The authors mention
@@ -42,36 +90,52 @@
     In the future it might be wise to refer back to this paper for info about the performance 
     metrics from RDMA verbs.\cite {Kalia-SIGCOMM-2014}
 
-    \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory} %% start here %%
-    This system is disaggregated. Node-granularity. "consistent". Optimizations are established
-    to target mainly chained atomic operations and write-amplification. \cite{Wang-SIGMOD-2022}
+    \subsection{Sherman: A Write-Optimized Distributed B+Tree Index on Disaggregated Memory}
+    This system is disaggregated meaning a system where compute and memory servers are separated. 
+    Node-granularity. "consistent". Optimizations are established
+    to target mainly chained atomic operations and write-amplification. Uses a cache of indexes to boost 
+    performance, since they are just pointers it cannot have coherence problems. Introduce a 
+    HOCL (Heirarchical On Chip Lock)\cite{Wang-SIGMOD-2022}
 
     \subsection{Using One-Sided RDMA Reads to Build a Fast, CPU-Efficient Key-Value Store (Pilaf) }
-    Linearizable data store.  Self-correcting. Note that this paper has a great 
-    analysis of IPoIB as well as RDMA vs verbs latency and thrup. \cite{Mitchell-ATC-2013}
+    Linearizable data store.  Self-veriftying meanin that they use checksum and size information stored along pointers
+    that have been cached which ensures automatic garbage collection. Note that this paper has a great 
+    analysis of IPoIB as well as RDMA vs verbs latency and thrup. This paper has 1 sided reads which are 
+    initiated by the client while having store handled by the remote server. Uses Cuckoo hashing and uses 
+    a reshuffling scheme where keys may move when all hash slots are full, but will always exist in at least 1 location.\cite{Mitchell-ATC-2013}
 
-    %%  NEWLY ADDED  %%
+    
     \subsection{Scythe: A Low-Latency RDMA-enabled Distributed Transaction System for Disaggregate Memory }
-    KVS again. Seels to optimize concurrency control, timestamping, bandwidth. Uses Timestamp Oracle (TSO)
-    hot-aware concurrecy control. Allows RPC. \cite{Lu-ACMtrans-2024}
+    KVS again. Seeks to optimize concurrency control, timestamping, bandwidth. Uses Timestamp Oracle (TSO)
+    hot-aware concurrecy control. Allows RPC. Basically split the design into two modes: low-heat and high-heat.
+    Things like a Hot-aware takeout lock are used to ensure fairness. This whole system is very transactions focused. \cite{Lu-ACMtrans-2024}
 
     \subsection{HCL: Distributing Parallel Data Structures in Extreme Scales}
-    Strictly serializabile KVS. HCL stands for Hermes Containder Library. \cite{Devarajan-CLUSTER-2020}
+    Strictly serializabile KVS. HCL stands for Hermes Containder Library. This is essentially a library 
+    which exports some high performance data structures and methods. Uses some RPC\cite{Devarajan-CLUSTER-2020}
 
     \subsection{BCL: A Cross-Platform Distributed Data Structures Library}
-    Confusingly uses either MPI, OpenSHMEM, GASNET-EX, and UPC++ as backends. Must be slow. \cite{Brock-ICPP-2019}
+    Uses either MPI, OpenSHMEM, GASNET-EX, and UPC++ as backends. Uses a DSL to implement the data structures 
+    exported by the library. \cite{Brock-ICPP-2019}
     
     \subsection{Rolex}
-    I don't think this one really works. Uses learned indexes. splits compute and memory. \cite{Li-FAST-2023}
+    Uses learned indexes. splits compute and memory. Referenced in newer papers as performing better than Sherman.
+    Uses what they call "leaf-atomic shift sheme" to allow for new allocations. The one major performance drawback 
+    is when retraining occurs (when data move out of the error range) The whole system must block for retraining. 
+    This paper has lots of math and such describing their techniques. \cite{Li-FAST-2023}
 
     \subsection{Exploiting Hybrid Index Scheme for RDMA-based Key-Value Stores*** (Hstore)}
-    Seeks to solve issue of range-lookups. Compares against Sherman and Clover( LOOK INTO CLOVER). 
+    Seeks to solve issue of range-lookups. Compares against Sherman and Clover beating both. 
     This does indeed outperform sherman on YCSB. Maybe problematic for LOCO. claims 54\% improvement 
-    over sherman.\cite{Han-SYSTOR-2023}
+    over sherman. Uses a hybrid scheme of skiplist and hashtable for range lookups and single lookups respectively.
+    Uses a client / server model. GETs are one sided while other operations are two sided. supports "serializability"
+    and there is come metion of writes being sequential. "strong consistency"\cite{Han-SYSTOR-2023}
 
     \subsection{Disaggregating Persistent Memory and Controlling Them Remotely: An Exploration of Passive Disaggregated Key-Value Stores}
-    "Clover". Workes on Persistent memory. A bit older, not worth comparing against unless looking into PM. also maybe faster 
-    than Sherman but definitely not the fastest.\cite{Tsai-USENIX-2020}
+    "Clover". Workes on Persistent memory. Uses interesting method of chaing updates together to avoid conflicts. Reads traverse
+    these "chains" to find the latest write."shortcuts" are used and are issued in parallel to regualr reads, whichever 
+    operation returns first is used. Wrtites occur out-of-place when does CAS pointer swing on the tail of the chain to the new data. also maybe faster 
+    than Sherman but definitely not the fastest. the meta-data servers will handle the garbage collection when things are freed.\cite{Tsai-USENIX-2020}
 
     \subsection{AStore: Uniformed Adaptive Learned Index and Cache for RDMA-Enabled Key-Value Store}
     Supposedly outperforms \textbf{Sherman} by A LOT. ALso compares against "xstore" "Rolex" and "hybrid (not to be confused
