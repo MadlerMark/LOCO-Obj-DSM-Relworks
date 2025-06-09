@@ -41,11 +41,21 @@ between cached copies of data. This paper falls into the category of PGAS, but r
 to use Release Consistency, and the observation that the only time coherence is needed in Release Consistency 
 is when there is a synchronizes-with edge between an acquire and a release.
 
+%% client-server models tend to be "distributed" so long as there is support for multiple servers %%
+% should there be a new category for the client server stuff? - the issue is that it does not fully utilize the address 
+% space like a p2p setup
 distributed + pgas stuff:
-farm (though there is replication for durability \cite{Dragojevic-NSDI-2014}), 
+FaRM (though there is replication for durability \cite{Dragojevic-NSDI-2014}), Sherman \cite{Wang-SIGMOD-2022},
+\cite{Kalia-SIGCOMM-2014}, \cite{Mitchell-ATC-2013}, \cite{Devarajan-CLUSTER-2020}, \cite{Brock-ICPP-2019},
+\cite{Lu-ACMtrans-2024}, \cite{Li-FAST-2023}, \cite{Han-SYSTOR-2023}??, \cite{Qiao-IEEEtrans-2024},
+\cite{Hou-DSIT-2024}, \cite{Xiong-ICDCS-2023}, \cite{Duan-ICDCS-2021}, \cite{Cai-VLDB-2018}, 
+\cite{Hong-JCST-2019}, \cite{Amza-Usenix-1994}, \cite{Tsai-SOSP-2017}, \cite{Endo-IPDRM-2020}, 
+\cite{Kaxiras-HPDC-2015}, \cite{Jia-ACO-2022}, \cite{Farreras-IPDPS-2009}
+
 
 replicated stuff:
-Kite (\cite{Gavrielatos-PPoPP-2020}), 
+Kite (\cite{Gavrielatos-PPoPP-2020}), \cite{Alquraan-NSDI-2024}, \cite{Katsarakis-ASPLOS-2020}, 
+\cite{Gavrielatos-EuroSys-2021}, \cite{Houshmand-PLDI-2022}
 
 Distributed memory abstractions can generally be divided into three categories.
 These categories are Key-value stores, DSMs, and other. The nomenclature surrounding 
@@ -129,7 +139,7 @@ costly and caching should be implemented. Other
     This does indeed outperform sherman on YCSB. Maybe problematic for LOCO. claims 54\% improvement 
     over sherman. Uses a hybrid scheme of skiplist and hashtable for range lookups and single lookups respectively.
     Uses a client / server model. GETs are one sided while other operations are two sided. supports "serializability"
-    and there is come metion of writes being sequential. "strong consistency"\cite{Han-SYSTOR-2023}
+    and there is come metion of writes being sequential. "strong consistency" \cite{Han-SYSTOR-2023}
 
     \subsection{Disaggregating Persistent Memory and Controlling Them Remotely: An Exploration of Passive Disaggregated Key-Value Stores}
     "Clover". Workes on Persistent memory. Uses interesting method of chaing updates together to avoid conflicts. Reads traverse
@@ -146,7 +156,7 @@ costly and caching should be implemented. Other
     note really worth considering it seems. This is indeed a KVS but only seems to compare against scale store. \cite{Hou-DSIT-2024}
 
     \subsection{FastStore: A High-Performance RDMA-Enabled Distributed Key-Value Store with Persistent Memory}
-    not really worth considering. Again PM. COmpares against Clover and Sherman. Also is faster than Sherman with lower latency 
+    Persistent memory. Compares against Clover and Sherman with much faster RTT. Also is faster than Sherman with lower latency 
     as well as higher throughput. \cite{Xiong-ICDCS-2023}
 
     \subsection{LoLKV: The Logless, Linearizable, RDMA-based Key-Value Storage System}
@@ -164,13 +174,13 @@ costly and caching should be implemented. Other
     page faults to fetch pages before they are needed. Since the TLB is used extensively to maintain 
     a coherence within a node in terms of page visibility, there is a large overhead in the form of interrupts.
     The authors decided to batch these interrupts for improved performance. Unfortunately they have weak results
-    which slow slight improvements over a "baseline" but do not compare against anything else. The baseline seems to be 
+    which show slight improvements over a "baseline" but do not compare against anything else. The baseline seems to be 
     their DSM without the speculation and batching.\cite{Hong-JCST-2019}
 
     \subsection{Efficient Distributed Memory Management with RDMA and Caching (GAM) }
     cache-line granularity DSM. Directory based, \textbf{Partial Store Order}. \textbf{PGAS addressing model}. 
-    Use the directory to track the cache state at each node (DRMA cache). Attempsts to implement LRU 
-    caching.  \cite{Cai-VLDB-2018}
+    Use the directory to track the cache state at each node (DRMA cache). Attempsts to implement LRU '
+    caching. \cite{Cai-VLDB-2018}
 
     \subsection{Distributed Shared Object Memory}
     object based granularity, release consistency... too old for RDMA\cite{Guedes-WWOSIII-1993} %idk if worth reading
@@ -244,7 +254,7 @@ costly and caching should be implemented. Other
     is sort of a protocol paper as it implements this protocol to keep replicated data through either relaxed or 'strong consistency'.
 
     \subsection{Evaluation of RDMA opportunities in an Object-Oriented DSM}
-    Interesting result is that it proves that invalidation protocols are better suited 
+    Interesting result is that it "proves" that invalidation protocols are better suited 
     for distributed systems. \cite{Veldema-LCPC-2007}
 %----------------------------------------------------------------------------------------
 %                       AWESOME TABLE
